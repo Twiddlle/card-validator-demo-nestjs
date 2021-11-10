@@ -2,6 +2,7 @@ import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { CardIdValidationPipe } from './Pipes/card-id-validation-pipe';
 import { CardService } from './card.service';
 import {
+  ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -19,7 +20,6 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Get('/info/:cardId')
-  @ApiOkResponse({ type: CardInfoDto })
   @ApiOperation({
     operationId: 'getCardInfo',
     description: 'Return information about card',
@@ -29,6 +29,8 @@ export class CardController {
     description: 'Card id',
     example: '1234-5489-7896-4587',
   })
+  @ApiOkResponse({ type: CardInfoDto })
+  @ApiForbiddenResponse()
   public getInfo(@Param('cardId', new CardIdValidationPipe()) cardId: string) {
     return this.cardService.getCardStatus(cardId);
   }

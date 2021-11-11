@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CardRepository } from './Repository/card.repository';
 import { CardInfoDto } from './Dto/card-info.dto';
 import { CardStateResponse } from './Repository/Responses/card-state-response';
 import { CardValidityResponse } from './Repository/Responses/card-validity-response';
+import { CardRepositoryInterface } from './Repository/card-repository.interface';
 
 @Injectable()
 export class CardService {
-  constructor(private readonly cardRepository: CardRepository) {}
+  constructor(
+    @Inject(CardRepository)
+    private readonly cardRepository: CardRepositoryInterface,
+  ) {}
 
   public async getCardStatus(cardId: string) {
     const cardInfoDto = new CardInfoDto();
